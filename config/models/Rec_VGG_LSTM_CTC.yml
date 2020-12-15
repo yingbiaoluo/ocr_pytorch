@@ -1,0 +1,5 @@
+in_channels: 3
+
+backbone: VGG
+neck: SequenceDecoder
+head: CTC

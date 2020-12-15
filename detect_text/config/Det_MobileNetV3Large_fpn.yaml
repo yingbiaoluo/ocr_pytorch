@@ -1,0 +1,98 @@
+USE_GPU: True
+GPUID: 0
+
+cudnn:
+  enabled: True
+  benchmark: True
+  deterministic: False
+
+arch:
+  type: DetRegModel
+  args:
+    pretrained: false
+    backbone:
+      type: mobilenetv3_large
+    neck:
+      type: FPN
+      args:
+        inner_channels: 128
+    head:
+      type: DBHead
+      args:
+        out_channels: 2
+        k: 50
+
+metric:
+  type: QuadMetric
+  args:
+    is_output_polygon: false
+
+loss:
+  type: DBLoss
+  args:
+    alpha: 1
+    beta: 10
+    ohem_ratio: 3
+
+optimizer:
+  type: Adam
+  args:
+    lr: 0.001
+    weight_decay: 0
+    amsgrad: true
+
+lr_scheduler:
+  type: WarmupPolyLR
+  args:
+    warmup_epoch: 3
+
+trainer:
+  seed: 2
+  start_epoch: 0
+  end_epoch: 100
+  log_iter: 10
+  print_freq: 10
+  save_freq: 1
+  show_images_iter: 50
+  resume_checkpoint: ''
+  tensorboard: true
+  output_dir: './output'
+  logs_dir: './logs'
+
+data:
+  train:
+    dataset:
+      type: Quest_dataset
+      args:
+        images_root: "/home/lyb/ocr/text_det_reg/data/images_question/train_images"
+        labels_root: "/home/lyb/ocr/text_det_reg/data/images_question/train_labels"
+        preprocess: false
+        scale: true
+        scale_shape:
+          - 640
+          - 640
+        random_coordinate: true
+    loader:
+      batch_size: 16
+      shuffle: true
+      pin_memory: true
+      num_workers: 4
+      collate_fn: Quest_CollateFN
+  validation:
+    dataset:
+      type: Quest_dataset
+      args:
+        images_root: "/home/lyb/ocr/text_det_reg/data/images_question/val_images"
+        labels_root: "/home/lyb/ocr/text_det_reg/data/images_question/val_labels"
+        preprocess: false
+        scale: true
+        scale_shape:
+          - 640
+          - 640
+        random_coordinate: false
+    loader:
+      batch_size: 1
+      shuffle: false
+      pin_memory: true
+      num_workers: 4
+      collate_fn:

@@ -1,0 +1,5 @@
+# train and val data as 1) directory: path/images/, 2) file: path/images.txt, or 3) list: [path1/images/, path2/images/]
+train_image: /home/lyb/ocr/text_det_reg/data/detection/images/train
+train_label: /home/lyb/ocr/text_det_reg/data/detection/labels/train
+val_image: /home/lyb/ocr/text_det_reg/data/detection/images/val
+val_label: /home/lyb/ocr/text_det_reg/data/detection/labels/val

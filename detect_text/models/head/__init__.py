@@ -1,0 +1,1 @@
+from .detection_head import ClassificationModel, RegressionModel
